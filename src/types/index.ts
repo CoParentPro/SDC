@@ -278,7 +278,8 @@ export type AuditCategory =
   | 'file-operation'
   | 'system-configuration'
   | 'security-event'
-  | 'communication';
+  | 'communication'
+  | 'content-creation';
 
 // Billing types
 export interface Invoice {
@@ -464,6 +465,264 @@ export interface SelectOption {
   label: string;
   disabled?: boolean;
   icon?: React.ComponentType;
+}
+
+// Video Editor types
+export interface VideoProject {
+  id: string;
+  name: string;
+  duration: number;
+  fps: number;
+  resolution: string;
+  hasMedia: boolean;
+  tracks: VideoTrack[];
+  media: VideoMedia[];
+  metadata: DocumentMetadata;
+  permissions: DocumentPermissions;
+  exportSettings: VideoExportSettings;
+}
+
+export interface VideoTrack {
+  id: string;
+  type: 'video' | 'audio' | 'subtitle';
+  name: string;
+  clips: VideoClip[];
+  muted: boolean;
+  locked: boolean;
+  visible: boolean;
+  height: number;
+}
+
+export interface VideoClip {
+  id: string;
+  name: string;
+  startTime: number;
+  endTime: number;
+  duration: number;
+  trimStart: number;
+  trimEnd: number;
+  volume: number;
+  effects: VideoEffect[];
+  redactionMasks: RedactionMask[];
+  mediaId?: string;
+}
+
+export interface VideoMedia {
+  id: string;
+  name: string;
+  type: 'video' | 'audio';
+  url: string;
+  duration: number;
+  size: number;
+  format: string;
+  resolution?: string;
+  fps?: number;
+}
+
+export interface VideoEffect {
+  id: string;
+  type: 'filter' | 'transition' | 'text' | 'overlay';
+  name: string;
+  properties: Record<string, any>;
+  startTime: number;
+  duration: number;
+}
+
+export interface RedactionMask {
+  id: string;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  startFrame: number;
+  endFrame: number;
+  type: 'blur' | 'black' | 'pixelate';
+}
+
+export interface VideoExportSettings {
+  format: 'mp4' | 'avi' | 'mov' | 'webm';
+  quality: 'low' | 'medium' | 'high';
+  resolution: string;
+  fps: number;
+  bitrate: number;
+}
+
+// Creation Studio types
+export interface Presentation {
+  id: string;
+  name: string;
+  slides: Slide[];
+  theme: PresentationTheme;
+  settings: PresentationSettings;
+  metadata: DocumentMetadata;
+  permissions: DocumentPermissions;
+}
+
+export interface Slide {
+  id: string;
+  title: string;
+  content: SlideContent[];
+  background: SlideBackground;
+  transitions: SlideTransition[];
+  animations: SlideAnimation[];
+  notes: string;
+  duration?: number;
+}
+
+export interface SlideContent {
+  id: string;
+  type: 'text' | 'image' | 'video' | 'audio' | 'chart' | 'table' | 'quiz' | 'button';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  rotation: number;
+  opacity: number;
+  data: any;
+  animations: ContentAnimation[];
+}
+
+export interface SlideBackground {
+  type: 'color' | 'gradient' | 'image' | 'video';
+  value: string;
+  overlay?: {
+    color: string;
+    opacity: number;
+  };
+}
+
+export interface SlideTransition {
+  type: string;
+  duration: number;
+  direction?: string;
+  easing?: string;
+}
+
+export interface SlideAnimation {
+  id: string;
+  type: string;
+  target: string; // element id
+  duration: number;
+  delay: number;
+  easing: string;
+  properties: Record<string, any>;
+}
+
+export interface ContentAnimation {
+  id: string;
+  type: 'entrance' | 'emphasis' | 'exit';
+  effect: string;
+  duration: number;
+  delay: number;
+  trigger: 'auto' | 'click' | 'hover';
+}
+
+export interface PresentationTheme {
+  id: string;
+  name: string;
+  fonts: {
+    heading: string;
+    body: string;
+  };
+  colors: {
+    primary: string;
+    secondary: string;
+    accent: string;
+    background: string;
+    text: string;
+  };
+  spacing: {
+    small: number;
+    medium: number;
+    large: number;
+  };
+}
+
+export interface PresentationSettings {
+  autoAdvance: boolean;
+  autoAdvanceDelay: number;
+  showControls: boolean;
+  allowDownload: boolean;
+  enableComments: boolean;
+  enableAnalytics: boolean;
+  password?: string;
+}
+
+export interface Course {
+  id: string;
+  name: string;
+  description: string;
+  modules: CourseModule[];
+  settings: CourseSettings;
+  metadata: DocumentMetadata;
+  permissions: DocumentPermissions;
+}
+
+export interface CourseModule {
+  id: string;
+  title: string;
+  description: string;
+  lessons: Lesson[];
+  assessments: Assessment[];
+  order: number;
+  unlockCriteria?: UnlockCriteria;
+}
+
+export interface Lesson {
+  id: string;
+  title: string;
+  type: 'video' | 'text' | 'presentation' | 'interactive';
+  content: any;
+  duration: number;
+  order: number;
+  resources: LessonResource[];
+}
+
+export interface LessonResource {
+  id: string;
+  name: string;
+  type: 'pdf' | 'video' | 'audio' | 'link' | 'file';
+  url: string;
+  size?: number;
+  downloadable: boolean;
+}
+
+export interface Assessment {
+  id: string;
+  title: string;
+  type: 'quiz' | 'assignment' | 'project';
+  questions: AssessmentQuestion[];
+  timeLimit?: number;
+  attempts: number;
+  passingScore: number;
+  randomize: boolean;
+}
+
+export interface AssessmentQuestion {
+  id: string;
+  type: 'multiple-choice' | 'true-false' | 'essay' | 'fill-blank' | 'matching';
+  question: string;
+  options?: string[];
+  correctAnswer: any;
+  points: number;
+  explanation?: string;
+}
+
+export interface UnlockCriteria {
+  type: 'completion' | 'score' | 'time' | 'date';
+  value: any;
+  moduleIds?: string[];
+  lessonIds?: string[];
+}
+
+export interface CourseSettings {
+  isPublic: boolean;
+  enrollmentRequired: boolean;
+  certificate: boolean;
+  trackProgress: boolean;
+  allowDiscussions: boolean;
+  price?: number;
+  currency?: string;
 }
 
 // API Response types
