@@ -62,6 +62,7 @@ const BillingPage = () => {
       name: '',
       email: '',
       address: {
+        type: 'work' as const,
         street: '',
         city: '',
         state: '',
@@ -71,6 +72,7 @@ const BillingPage = () => {
     },
     items: [
       {
+        id: '',
         description: '',
         quantity: 1,
         rate: 0,
@@ -99,6 +101,7 @@ const BillingPage = () => {
           name: '',
           email: '',
           address: {
+            type: 'work' as const,
             street: '',
             city: '',
             state: '',
@@ -108,6 +111,7 @@ const BillingPage = () => {
         },
         items: [
           {
+            id: '',
             description: '',
             quantity: 1,
             rate: 0,
@@ -130,6 +134,7 @@ const BillingPage = () => {
       items: [
         ...prev.items,
         {
+          id: '',
           description: '',
           quantity: 1,
           rate: 0,

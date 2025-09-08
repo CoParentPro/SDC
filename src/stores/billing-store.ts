@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Invoice, Payment, CustomerDetails, InvoiceItem } from '@/types';
+import { Invoice, Payment, CustomerDetails, InvoiceItem, Address } from '@/types';
 import { AuditService } from '@/services/audit';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -9,13 +9,7 @@ interface Customer {
   name: string;
   email: string;
   phone?: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-    country: string;
-  };
+  address: Address;
   taxId?: string;
   totalBilled: number;
   totalPaid: number;
@@ -103,6 +97,7 @@ export const useBillingStore = create<BillingState>()(
               email: 'billing@acme.com',
               phone: '(555) 123-4567',
               address: {
+                type: 'work',
                 street: '123 Business St',
                 city: 'New York',
                 state: 'NY',
@@ -804,6 +799,7 @@ export const useBillingStore = create<BillingState>()(
             email: data.email || '',
             phone: data.phone,
             address: {
+              type: (data.address?.type as 'home' | 'work' | 'other') || 'work',
               street: data.address?.street || '',
               city: data.address?.city || '',
               state: data.address?.state || '',

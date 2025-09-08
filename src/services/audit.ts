@@ -254,6 +254,7 @@ export class AuditService {
       'system-configuration': 0,
       'security-event': 0,
       communication: 0,
+      'content-creation': 0,
     };
 
     const eventsByRisk: Record<string, number> = {
@@ -454,7 +455,7 @@ export class AuditService {
   private static async getActiveAlerts(): Promise<AuditAlert[]> {
     return this.executeTransaction([this.STORES.alerts], 'readonly', (transaction) => {
       const index = transaction.objectStore(this.STORES.alerts).index('acknowledged');
-      const request = index.getAll(false);
+      const request = index.getAll(IDBKeyRange.only(false));
       return new Promise<AuditAlert[]>((resolve, reject) => {
         request.onsuccess = () => resolve(request.result);
         request.onerror = () => reject(request.error);

@@ -53,6 +53,7 @@ interface AuthState {
   validatePassword: (password: string) => { valid: boolean; errors: string[] };
   getLoginHistory: () => LoginAttempt[];
   clearLoginHistory: () => void;
+  recordLoginAttempt: (success: boolean, ip?: string) => void;
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -489,12 +490,12 @@ export const useAuthStore = create<AuthState>()(
       },
 
       // Private helper method
-      recordLoginAttempt: (success: boolean) => {
+      recordLoginAttempt: (success: boolean, ip?: string) => {
         const state = get();
         const attempt: LoginAttempt = {
           timestamp: new Date(),
           success,
-          ip: '127.0.0.1', // Would be actual IP in real app
+          ip: ip || '127.0.0.1', // Would be actual IP in real app
         };
         
         const updatedAttempts = [...state.loginAttempts, attempt]

@@ -59,6 +59,7 @@ interface VideoCallState {
   checkVideoPermissions: () => Promise<boolean>;
   testMediaDevices: () => Promise<{ audio: boolean; video: boolean }>;
   getNetworkQuality: () => Promise<string>;
+  initializeLocalMedia: () => Promise<void>;
 }
 
 export const useVideoCallStore = create<VideoCallState>()(
@@ -638,7 +639,6 @@ export const useVideoCallStore = create<VideoCallState>()(
           });
 
           set({ localStream: stream });
-          return stream;
         } catch (error) {
           console.error('Failed to initialize local media:', error);
           throw error;

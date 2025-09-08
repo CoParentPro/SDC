@@ -100,6 +100,8 @@ const CreationStudioPage = () => {
     updateLesson,
     deleteLesson,
     
+    addAssessment,
+    
     exportPresentation,
     exportCourse,
   } = useCreationStudioStore();

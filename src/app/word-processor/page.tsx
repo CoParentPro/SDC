@@ -2,8 +2,9 @@
 
 import React, { useState, useCallback } from 'react'
 import { Slate, Editable, withReact } from 'slate-react'
-import { createEditor, Descendant, Editor, Transforms, Text } from 'slate'
-import { withHistory } from 'slate-history'
+import { createEditor, Descendant, Editor, Transforms, Text, BaseEditor } from 'slate'
+import { ReactEditor } from 'slate-react'
+import { HistoryEditor, withHistory } from 'slate-history'
 import { MainLayout } from '@/components/layout/main-layout'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -39,7 +40,7 @@ type CustomElement = {
 
 declare module 'slate' {
   interface CustomTypes {
-    Editor: Editor & {
+    Editor: BaseEditor & ReactEditor & HistoryEditor & {
       // Add custom editor methods here
     }
     Element: CustomElement

@@ -739,3 +739,81 @@ export interface ApiError {
   message: string;
   details?: any;
 }
+
+// Storage and Vault types
+export interface StorageStats {
+  totalSpace: number;
+  usedSpace: number;
+  freeSpace: number;
+  fileCount: number;
+  folderCount: number;
+  lastUpdated: Date;
+}
+
+// SDC File format types (new secure format)
+export interface SDCFile {
+  id: string;
+  name: string;
+  originalFormat: string;
+  encryptedData: ArrayBuffer;
+  publicKey: string;
+  privateKeyHash: string;
+  metadata: SDCMetadata;
+  signature: string;
+  createdAt: Date;
+  lastModified: Date;
+}
+
+export interface SDCMetadata {
+  title: string;
+  description?: string;
+  author: string;
+  version: string;
+  tags: string[];
+  security: {
+    encrypted: boolean;
+    compressionAlgorithm: string;
+    encryptionAlgorithm: string;
+    keyDerivation: string;
+  };
+  access: {
+    requiresKey: boolean;
+    expiresAt?: Date;
+    maxViews?: number;
+    viewCount: number;
+  };
+}
+
+// QR Code types for SDC files
+export interface SDCQRCode {
+  fileId: string;
+  publicKey: string;
+  accessUrl: string;
+  qrCodeData: string;
+  expiresAt?: Date;
+  maxUses?: number;
+  useCount: number;
+}
+
+// E-signature types
+export interface DigitalSignature {
+  id: string;
+  documentId: string;
+  signerId: string;
+  signerName: string;
+  signerEmail: string;
+  signature: string; // Base64 encoded signature
+  timestamp: Date;
+  certificateChain: string[];
+  algorithm: string;
+  isValid: boolean;
+}
+
+// Image filter types (fixing missing id property)
+export interface ImageFilter {
+  id: string;
+  name: string;
+  type: string;
+  settings: Record<string, any>;
+  intensity?: number;
+}

@@ -37,7 +37,7 @@ import {
   XCircle,
   Info
 } from 'lucide-react';
-import { AuditEvent, AuditCategory } from '../../../types';
+import { AuditEvent, AuditCategory } from '@/types';
 import { AuditService } from '@/services/audit';
 import { formatDate, formatDateString } from '@/utils/format';
 import {
@@ -528,7 +528,7 @@ const AuditTrailPage = () => {
                           <div className="flex items-center space-x-2">
                             {getCategoryIcon(event.category)}
                             <h4 className={`text-sm font-medium ${getActionColor(event.action)}`}>
-                              {event.action.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+                              {event.action.replace(/-/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
                             </h4>
                             <span className="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200">
                               {event.category.replace(/-/g, ' ')}

@@ -1,5 +1,5 @@
 import { EncryptionService, EncryptedData } from './encryption';
-import { SecureFile, FileMetadata, FilePermissions, FileVersion } from '../types';
+import { SecureFile, FileMetadata, FilePermissions, FileVersion, StorageStats } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 export interface FileSystemConfig {
@@ -8,14 +8,6 @@ export interface FileSystemConfig {
   encryptionEnabled: boolean;
   versioningEnabled: boolean;
   storageQuota: number; // bytes
-}
-
-export interface StorageStats {
-  totalSpace: number;
-  usedSpace: number;
-  availableSpace: number;
-  fileCount: number;
-  folderCount: number;
 }
 
 export class FileSystemService {
@@ -165,7 +157,7 @@ export class FileSystemService {
 
     let fileData: ArrayBuffer;
     if (file.encrypted && password) {
-      if (typeof fileDataRecord.data === 'object' && 'data' in fileDataRecord.data) {
+      if (typeof fileDataRecord === 'object' && fileDataRecord && 'data' in fileDataRecord) {
         fileData = EncryptionService.decryptFile(fileDataRecord.data as EncryptedData, password);
       } else {
         throw new Error('Invalid encrypted file format');
@@ -173,7 +165,7 @@ export class FileSystemService {
     } else if (file.encrypted && !password) {
       throw new Error('Password required for encrypted file');
     } else {
-      fileData = fileDataRecord.data as ArrayBuffer;
+      fileData = fileDataRecord as unknown as ArrayBuffer;
     }
 
     // Verify integrity
@@ -309,9 +301,10 @@ export class FileSystemService {
     return {
       totalSpace: this.DEFAULT_CONFIG.storageQuota,
       usedSpace: totalSize,
-      availableSpace: this.DEFAULT_CONFIG.storageQuota - totalSize,
+      freeSpace: this.DEFAULT_CONFIG.storageQuota - totalSize,
       fileCount,
       folderCount,
+      lastUpdated: new Date(),
     };
   }
 
