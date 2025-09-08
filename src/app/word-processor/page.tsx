@@ -62,12 +62,19 @@ const toggleMark = (editor: Editor, format: string) => {
   }
 }
 
-// Redaction function - permanently removes text
-const redactSelection = (editor: Editor) => {
+// Redaction function - permanently removes text and clears undo history
+const redactSelection = (editor: Editor & { history?: any }) => {
   if (editor.selection) {
+    // Delete the selected text
     Transforms.delete(editor, { at: editor.selection })
+    // Insert block characters to indicate redaction
     Transforms.insertText(editor, '█████', { at: editor.selection })
     Editor.addMark(editor, 'redacted', true)
+    // Clear undo/redo history to prevent recovery
+    if (editor.history) {
+      editor.history.undos = []
+      editor.history.redos = []
+    }
   }
 }
 
