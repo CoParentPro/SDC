@@ -1,6 +1,25 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+## 🚀 Quick Start Installation
+
+### For Users (Recommended)
+**Go to the [`install-and-run`](install-and-run/) folder for complete installation instructions for all platforms.**
+
+### Windows Desktop Application
+```cmd
+cd install-and-run/windows-desktop
+install-windows.bat
+```
+
+### Web Browser Application (All Platforms)
+```bash
+cd install-and-run/web-browser
+./deploy-web.sh
+```
+
+---
+
+## 🧑‍💻 Developer Setup
 
 First, run the development server:
 
@@ -19,6 +38,17 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## 📱 Platform Support
+
+SDC supports multiple deployment methods:
+- **Windows Desktop**: Native Electron application
+- **Web Browser**: Cross-platform web application  
+- **Mobile**: Progressive Web App (PWA)
+- **Docker**: Containerized deployment
+- **Cloud**: Vercel, Netlify, AWS, Azure support
+
+See [`install-and-run/PLATFORM_SUPPORT.md`](install-and-run/PLATFORM_SUPPORT.md) for complete platform details.
 
 ## Learn More
 

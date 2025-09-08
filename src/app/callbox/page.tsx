@@ -192,7 +192,7 @@ export default function CallboxPage() {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex justify-between">
-                <span className="text-sm">Today's Calls</span>
+                <span className="text-sm">Today&apos;s Calls</span>
                 <span className="font-semibold">8</span>
               </div>
               <div className="flex justify-between">
