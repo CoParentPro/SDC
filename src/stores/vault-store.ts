@@ -1,23 +1,35 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SecureFile, StorageStats } from '@/types';
+import { SecureFile, StorageStats, SDCFile } from '@/types';
 import { FileSystemService } from '@/services/filesystem';
+import { SDCFormatService, SDCExportOptions } from '@/services/sdc-format';
+import { QRCodeService } from '@/services/qr-code';
 import { AuditService } from '@/services/audit';
 import { EncryptionService } from '@/services/encryption';
 
 interface VaultState {
   files: SecureFile[];
+  sdcFiles: SDCFile[];
   currentFolder: string | undefined;
   isLoading: boolean;
   storageStats: StorageStats | null;
   searchResults: SecureFile[];
   isSearching: boolean;
   
-  // File operations
+  // File operations (now defaults to .sdc format)
   loadFiles: (folderId?: string) => Promise<void>;
   uploadFile: (file: File, password: string, parentId?: string) => Promise<void>;
+  uploadAsSDC: (file: File, metadata: any, options: SDCExportOptions) => Promise<SDCFile>;
   downloadFile: (fileId: string, password: string) => Promise<void>;
+  downloadSDCFile: (sdcFile: SDCFile, privateKey?: string, password?: string) => Promise<void>;
   deleteFile: (fileId: string) => Promise<void>;
+  deleteSDCFile: (sdcFileId: string) => Promise<void>;
+  
+  // SDC file operations
+  loadSDCFiles: () => Promise<void>;
+  convertToSDC: (fileId: string, options: SDCExportOptions) => Promise<SDCFile>;
+  exportSDCFile: (sdcFileId: string) => Promise<void>;
+  generateQRCode: (sdcFileId: string) => Promise<string>;
   
   // Folder operations
   createFolder: (name: string, parentId?: string) => Promise<void>;
@@ -25,10 +37,12 @@ interface VaultState {
   
   // Search
   searchFiles: (query: string) => Promise<void>;
+  searchSDCFiles: (query: string) => Promise<SDCFile[]>;
   clearSearch: () => void;
   
   // File sharing
   shareFile: (fileId: string, recipientEmail: string, permissions: 'view' | 'edit' | 'download', expiresAt?: Date) => Promise<string>;
+  shareSDCFile: (sdcFileId: string, generateQR?: boolean) => Promise<{ shareUrl: string; qrCode?: string }>;
   revokeShare: (shareId: string) => Promise<void>;
   
   // Storage management
@@ -44,6 +58,7 @@ export const useVaultStore = create<VaultState>()(
   persist(
     (set, get) => ({
       files: [],
+      sdcFiles: [],
       currentFolder: undefined,
       isLoading: false,
       storageStats: null,
@@ -428,6 +443,295 @@ export const useVaultStore = create<VaultState>()(
           );
         } catch (error) {
           console.error('Failed to restore version:', error);
+          throw error;
+        }
+      },
+
+      // SDC File Operations
+      loadSDCFiles: async () => {
+        try {
+          set({ isLoading: true });
+          
+          const stored = localStorage.getItem('sdc_files');
+          const sdcFiles = stored ? JSON.parse(stored) : [];
+          
+          set({ sdcFiles, isLoading: false });
+          
+          await AuditService.logEvent(
+            'sdc-files-loaded',
+            'vault',
+            'all',
+            { count: sdcFiles.length },
+            'data-access',
+            'low'
+          );
+        } catch (error) {
+          console.error('Failed to load SDC files:', error);
+          set({ isLoading: false });
+        }
+      },
+
+      uploadAsSDC: async (file: File, metadata: any, options: SDCExportOptions) => {
+        try {
+          const arrayBuffer = await file.arrayBuffer();
+          
+          const sdcFile = await SDCFormatService.createSDCFile(
+            arrayBuffer,
+            file.name,
+            metadata,
+            options
+          );
+          
+          const state = get();
+          set({ sdcFiles: [...state.sdcFiles, sdcFile] });
+          
+          await AuditService.logEvent(
+            'sdc-file-created',
+            'vault',
+            sdcFile.id,
+            { 
+              name: sdcFile.name,
+              originalFormat: sdcFile.originalFormat,
+              encrypted: sdcFile.metadata.security.encrypted,
+              size: sdcFile.encryptedData.byteLength
+            },
+            'file-operation',
+            'low'
+          );
+          
+          return sdcFile;
+        } catch (error) {
+          console.error('Failed to upload as SDC:', error);
+          throw error;
+        }
+      },
+
+      convertToSDC: async (fileId: string, options: SDCExportOptions) => {
+        try {
+          const file = await FileSystemService.retrieveFile(fileId);
+          if (!file) throw new Error('File not found');
+          
+          const fileData = await FileSystemService.retrieveFile(fileId);
+          
+          const sdcFile = await SDCFormatService.createSDCFile(
+            fileData.data,
+            file.file.name,
+            {
+              title: file.file.name,
+              author: 'Current User',
+              tags: []
+            },
+            options
+          );
+          
+          const state = get();
+          set({ sdcFiles: [...state.sdcFiles, sdcFile] });
+          
+          await AuditService.logEvent(
+            'file-converted-to-sdc',
+            'vault',
+            fileId,
+            { sdc_file_id: sdcFile.id },
+            'file-operation',
+            'medium'
+          );
+          
+          return sdcFile;
+        } catch (error) {
+          console.error('Failed to convert to SDC:', error);
+          throw error;
+        }
+      },
+
+      downloadSDCFile: async (sdcFile: SDCFile, privateKey?: string, password?: string) => {
+        try {
+          const result = await SDCFormatService.readSDCFile(sdcFile, privateKey, password);
+          
+          if (result.success && result.data) {
+            const blob = new Blob([result.data], { 
+              type: `application/${sdcFile.originalFormat}` 
+            });
+            const url = URL.createObjectURL(blob);
+            
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = sdcFile.name.replace('.sdc', `.${sdcFile.originalFormat}`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            URL.revokeObjectURL(url);
+            
+            await AuditService.logEvent(
+              'sdc-file-downloaded',
+              'vault',
+              sdcFile.id,
+              { 
+                name: sdcFile.name,
+                views_remaining: result.viewsRemaining 
+              },
+              'file-operation',
+              'low'
+            );
+          } else {
+            throw new Error(result.error || 'Failed to decrypt file');
+          }
+        } catch (error) {
+          console.error('Failed to download SDC file:', error);
+          
+          await AuditService.logEvent(
+            'sdc-file-download-failed',
+            'vault',
+            sdcFile.id,
+            { error: error instanceof Error ? error.message : 'unknown' },
+            'file-operation',
+            'high'
+          );
+          
+          throw error;
+        }
+      },
+
+      deleteSDCFile: async (sdcFileId: string) => {
+        try {
+          const state = get();
+          const updatedFiles = state.sdcFiles.filter(f => f.id !== sdcFileId);
+          set({ sdcFiles: updatedFiles });
+          
+          // Update localStorage
+          localStorage.setItem('sdc_files', JSON.stringify(updatedFiles));
+          
+          await AuditService.logEvent(
+            'sdc-file-deleted',
+            'vault',
+            sdcFileId,
+            {},
+            'file-operation',
+            'medium'
+          );
+        } catch (error) {
+          console.error('Failed to delete SDC file:', error);
+          throw error;
+        }
+      },
+
+      exportSDCFile: async (sdcFileId: string) => {
+        try {
+          const state = get();
+          const sdcFile = state.sdcFiles.find(f => f.id === sdcFileId);
+          if (!sdcFile) throw new Error('SDC file not found');
+          
+          const exportBlob = await SDCFormatService.exportSDCFile(sdcFile);
+          const url = URL.createObjectURL(exportBlob);
+          
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = sdcFile.name;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          URL.revokeObjectURL(url);
+          
+          await AuditService.logEvent(
+            'sdc-file-exported',
+            'vault',
+            sdcFileId,
+            { name: sdcFile.name },
+            'file-operation',
+            'low'
+          );
+        } catch (error) {
+          console.error('Failed to export SDC file:', error);
+          throw error;
+        }
+      },
+
+      generateQRCode: async (sdcFileId: string) => {
+        try {
+          const state = get();
+          const sdcFile = state.sdcFiles.find(f => f.id === sdcFileId);
+          if (!sdcFile) throw new Error('SDC file not found');
+          
+          const result = await QRCodeService.generateSDCQRCode(sdcFile);
+          if (!result.success) {
+            throw new Error(result.error || 'QR code generation failed');
+          }
+          
+          await AuditService.logEvent(
+            'qr-code-generated',
+            'vault',
+            sdcFileId,
+            { name: sdcFile.name },
+            'file-operation',
+            'low'
+          );
+          
+          return result.qrCodeDataUrl!;
+        } catch (error) {
+          console.error('Failed to generate QR code:', error);
+          throw error;
+        }
+      },
+
+      searchSDCFiles: async (query: string) => {
+        try {
+          const state = get();
+          const filteredFiles = state.sdcFiles.filter(file =>
+            file.name.toLowerCase().includes(query.toLowerCase()) ||
+            file.metadata.title.toLowerCase().includes(query.toLowerCase()) ||
+            file.metadata.author.toLowerCase().includes(query.toLowerCase()) ||
+            file.metadata.tags.some(tag => tag.toLowerCase().includes(query.toLowerCase()))
+          );
+          
+          await AuditService.logEvent(
+            'sdc-files-searched',
+            'vault',
+            'search',
+            { query, results: filteredFiles.length },
+            'data-access',
+            'low'
+          );
+          
+          return filteredFiles;
+        } catch (error) {
+          console.error('Failed to search SDC files:', error);
+          return [];
+        }
+      },
+
+      shareSDCFile: async (sdcFileId: string, generateQR: boolean = true) => {
+        try {
+          const state = get();
+          const sdcFile = state.sdcFiles.find(f => f.id === sdcFileId);
+          if (!sdcFile) throw new Error('SDC file not found');
+          
+          const shareUrl = `${window.location.origin}/sdc-reader?file=${sdcFile.id}&key=${encodeURIComponent(sdcFile.publicKey)}`;
+          
+          let qrCode: string | undefined;
+          if (generateQR) {
+            const qrResult = await QRCodeService.generateSDCQRCode(sdcFile);
+            if (qrResult.success) {
+              qrCode = qrResult.qrCodeDataUrl!;
+            }
+          }
+          
+          await AuditService.logEvent(
+            'sdc-file-shared',
+            'vault',
+            sdcFileId,
+            { 
+              name: sdcFile.name,
+              qr_generated: generateQR,
+              share_url: shareUrl
+            },
+            'file-operation',
+            'medium'
+          );
+          
+          return { shareUrl, qrCode };
+        } catch (error) {
+          console.error('Failed to share SDC file:', error);
           throw error;
         }
       },
