@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Video,
   VideoOff,
@@ -25,7 +25,7 @@ import {
   Clock,
   Wifi,
   WifiOff,
-  Record,
+  Circle,
   Square,
   Download,
   Languages,
@@ -38,21 +38,21 @@ import {
   Crown,
   UserX
 } from 'lucide-react';
-import { useVideoCallStore } from '../../../stores/video-call-store';
-import { formatTime } from '../../../utils/format';
+import { useVideoCallStore } from '@/stores/video-call-store';
+import { formatTime } from '@/utils/format';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../../components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/ui/dialog';
+} from '@/components/ui/dialog';
 
 const VideoCallPage = () => {
   const {
@@ -391,7 +391,7 @@ const VideoCallPage = () => {
         <div className="flex items-center space-x-2">
           {isRecording && (
             <div className="flex items-center space-x-1 text-red-400">
-              <Record className="h-4 w-4" />
+              <Circle className="h-4 w-4" />
               <span className="text-sm">Recording</span>
             </div>
           )}
@@ -669,7 +669,7 @@ const VideoCallPage = () => {
             onClick={isRecording ? stopRecording : startRecording}
             className="rounded-full w-12 h-12"
           >
-            {isRecording ? <Square className="h-5 w-5" /> : <Record className="h-5 w-5" />}
+            {isRecording ? <Square className="h-5 w-5" /> : <Circle className="h-5 w-5" />}
           </Button>
 
           {/* End Call */}

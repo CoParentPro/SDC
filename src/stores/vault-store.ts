@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SecureFile, StorageStats } from '../types';
-import { FileSystemService } from '../services/filesystem';
-import { AuditService } from '../services/audit';
-import { EncryptionService } from '../services/encryption';
+import { SecureFile, StorageStats } from '@/types';
+import { FileSystemService } from '@/services/filesystem';
+import { AuditService } from '@/services/audit';
+import { EncryptionService } from '@/services/encryption';
 
 interface VaultState {
   files: SecureFile[];

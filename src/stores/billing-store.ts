@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Invoice, Payment, CustomerDetails, InvoiceItem } from '../types';
-import { AuditService } from '../services/audit';
+import { Invoice, Payment, CustomerDetails, InvoiceItem } from '@/types';
+import { AuditService } from '@/services/audit';
 import { v4 as uuidv4 } from 'uuid';
 
 interface Customer {

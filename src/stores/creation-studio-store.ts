@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Presentation, Slide, Course, CourseModule, Lesson, Assessment } from '../types';
-import { EncryptionService } from '../services/encryption';
-import { AuditService } from '../services/audit';
+import { Presentation, Slide, Course, CourseModule, Lesson, Assessment } from '@/types';
+import { EncryptionService } from '@/services/encryption';
+import { AuditService } from '@/services/audit';
 import { v4 as uuidv4 } from 'uuid';
 
 interface CreationStudioState {

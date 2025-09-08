@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { 
   Upload, 
   Download, 
@@ -19,21 +19,21 @@ import {
   Share,
   MoreHorizontal
 } from 'lucide-react';
-import { useVaultStore } from '../../../stores/vault-store';
-import { formatBytes, formatDate } from '../../../utils/format';
+import { useVaultStore } from '@/stores/vault-store';
+import { formatBytes, formatDate } from '@/utils/format';
 import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../../components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/ui/dialog';
+} from '@/components/ui/dialog';
 
 const SecureVaultPage = () => {
   const {

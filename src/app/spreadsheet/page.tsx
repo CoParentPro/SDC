@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useCallback, useEffect } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
   Calculator, 
   Save, 
@@ -17,8 +17,8 @@ import {
   Lock,
   Shield
 } from 'lucide-react';
-import { useSpreadsheetStore } from '../../../stores/spreadsheet-store';
-import { FormulaEngine } from '../../../services/formula-engine';
+import { useSpreadsheetStore } from '@/stores/spreadsheet-store';
+import { FormulaEngine } from '@/services/formula-engine';
 
 interface CellPosition {
   row: number;

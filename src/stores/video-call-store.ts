@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { VideoCall, CallParticipant, CallMessage, CallTranscription } from '../types';
-import { EncryptionService } from '../services/encryption';
-import { AuditService } from '../services/audit';
+import { VideoCall, CallParticipant, CallMessage, CallTranscription } from '@/types';
+import { EncryptionService } from '@/services/encryption';
+import { AuditService } from '@/services/audit';
 import { v4 as uuidv4 } from 'uuid';
 
 interface VideoCallState {

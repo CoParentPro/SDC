@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { 
   Search, 
   Plus, 
@@ -19,21 +19,21 @@ import {
   MessageCircle,
   Video
 } from 'lucide-react';
-import { useContactsStore } from '../../../stores/contacts-store';
-import { formatPhoneNumber, getInitials, stringToColor } from '../../../utils/format';
+import { useContactsStore } from '@/stores/contacts-store';
+import { formatPhoneNumber, getInitials, stringToColor } from '@/utils/format';
 import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../../components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import { 
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/ui/dialog';
+} from '@/components/ui/dialog';
 
 const ContactsPage = () => {
   const {

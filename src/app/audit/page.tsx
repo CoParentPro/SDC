@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Shield,
   AlertTriangle,
@@ -38,14 +38,14 @@ import {
   Info
 } from 'lucide-react';
 import { AuditEvent, AuditCategory } from '../../../types';
-import { AuditService } from '../../../services/audit';
-import { formatDate, formatDateString } from '../../../utils/format';
+import { AuditService } from '@/services/audit';
+import { formatDate, formatDateString } from '@/utils/format';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../../components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 
 const AuditTrailPage = () => {
   const [events, setEvents] = useState<AuditEvent[]>([]);

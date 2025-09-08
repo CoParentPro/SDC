@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { Contact, CommunicationRecord } from '../types';
-import { EncryptionService } from '../services/encryption';
-import { AuditService } from '../services/audit';
+import { Contact, CommunicationRecord } from '@/types';
+import { EncryptionService } from '@/services/encryption';
+import { AuditService } from '@/services/audit';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ContactGroup {

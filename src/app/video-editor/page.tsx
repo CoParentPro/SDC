@@ -1,9 +1,9 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
-import { Slider } from '../../../components/ui/slider';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Slider } from '@/components/ui/slider';
 import {
   Play,
   Pause,
@@ -32,21 +32,21 @@ import {
   Crop,
   Plus
 } from 'lucide-react';
-import { useVideoEditorStore } from '../../../stores/video-editor-store';
-import { formatTime } from '../../../utils/format';
+import { useVideoEditorStore } from '@/stores/video-editor-store';
+import { formatTime } from '@/utils/format';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../../components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../../../components/ui/dialog';
+} from '@/components/ui/dialog';
 
 const VideoEditorPage = () => {
   const {

@@ -1,8 +1,8 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { VideoProject, VideoClip, VideoEffect, RedactionMask, VideoTrack } from '../types';
-import { EncryptionService } from '../services/encryption';
-import { AuditService } from '../services/audit';
+import { VideoProject, VideoClip, VideoEffect, RedactionMask, VideoTrack } from '@/types';
+import { EncryptionService } from '@/services/encryption';
+import { AuditService } from '@/services/audit';
 import { v4 as uuidv4 } from 'uuid';
 
 interface VideoEditorState {

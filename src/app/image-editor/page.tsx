@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useRef, useEffect, useCallback } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { 
   Upload, 
   Download, 
@@ -26,8 +26,8 @@ import {
   ZoomOut,
   Hand
 } from 'lucide-react';
-import { useImageEditorStore } from '../../../stores/image-editor-store';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '../../../components/ui/tabs';
+import { useImageEditorStore } from '@/stores/image-editor-store';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 const ImageEditorPage = () => {
   const {

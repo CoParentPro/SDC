@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Button } from '../../../components/ui/button';
-import { Input } from '../../../components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { 
   Send, 
   Paperclip, 
@@ -21,14 +21,14 @@ import {
   Star,
   Flag
 } from 'lucide-react';
-import { useMessagingStore } from '../../../stores/messaging-store';
-import { formatDate, getInitials, stringToColor } from '../../../utils/format';
+import { useMessagingStore } from '@/stores/messaging-store';
+import { formatDate, getInitials, stringToColor } from '@/utils/format';
 import { 
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '../../../components/ui/dropdown-menu';
+} from '@/components/ui/dropdown-menu';
 
 const MessagingPage = () => {
   const {

@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { ImageProject, ImageLayer, ImageHistoryStep, ImageFilter } from '../types';
-import { AuditService } from '../services/audit';
+import { ImageProject, ImageLayer, ImageHistoryStep, ImageFilter } from '@/types';
+import { AuditService } from '@/services/audit';
 import { v4 as uuidv4 } from 'uuid';
 
 interface ImageEditorState {
