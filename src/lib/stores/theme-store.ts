@@ -31,6 +31,7 @@ export const useThemeStore = create<ThemeState>()(
     }),
     {
       name: 'sdc-theme-storage',
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
