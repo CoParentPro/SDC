@@ -134,6 +134,7 @@ export function AppSidebar({ className }: AppSidebarProps) {
         <Button 
           className="w-full justify-start" 
           size={isCollapsed ? "icon" : "default"}
+          aria-label={isCollapsed ? "New Document" : undefined}
         >
           <Plus className="w-4 h-4" />
           {!isCollapsed && <span className="ml-2">New Document</span>}
