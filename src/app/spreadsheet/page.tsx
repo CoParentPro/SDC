@@ -33,6 +33,7 @@ const SpreadsheetPage = () => {
     isLoading,
     loadSpreadsheet,
     createSheet,
+    createDocument,
     selectCell,
     updateCellValue,
     addSheet,
@@ -42,6 +43,13 @@ const SpreadsheetPage = () => {
 
   const [formulaInput, setFormulaInput] = useState('');
   const [isEditingFormula, setIsEditingFormula] = useState(false);
+
+  // Initialize with default document if none exists
+  useEffect(() => {
+    if (!currentSheet && sheets.length === 0) {
+      createDocument('New Spreadsheet');
+    }
+  }, [currentSheet, sheets, createDocument]);
 
   useEffect(() => {
     if (selectedCell && currentSheet) {

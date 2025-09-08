@@ -15,7 +15,7 @@ import {
   Key,
   FileText,
   QrCode,
-  AlertTriangle,
+  AlertTriangle as TriangleAlert,
   CheckCircle,
   Clock,
   Users,
@@ -238,9 +238,11 @@ const SDCReaderPage = () => {
 
         {/* Error Display */}
         {error && (
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" variant="destructive">
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"Triangle className="h-4 w-4" />
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"Description>{error}</p>
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+            <div className="flex items-center">
+              <TriangleAlert className="h-4 w-4 mr-2" />
+              <span>{error}</span>
+            </div>
           </div>
         )}
 
@@ -425,14 +427,16 @@ const SDCReaderPage = () => {
             <CardContent>
               {decryptionResult.success ? (
                 <div className="space-y-4">
-                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
-                    <CheckCircle className="h-4 w-4" />
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"Description>
-                      File has been successfully decrypted and is ready for viewing.
-                      {decryptionResult.viewsRemaining !== undefined && (
-                        <> Views remaining: {decryptionResult.viewsRemaining}</>
-                      )}
-                    </p>
+                  <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">
+                    <div className="flex items-center">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      <div>
+                        <span>File has been successfully decrypted and is ready for viewing.</span>
+                        {decryptionResult.viewsRemaining !== undefined && (
+                          <span> Views remaining: {decryptionResult.viewsRemaining}</span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                   
                   <div className="flex gap-2">
@@ -447,9 +451,11 @@ const SDCReaderPage = () => {
                   </div>
                 </div>
               ) : (
-                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded" variant="destructive">
-                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"Triangle className="h-4 w-4" />
-                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"Description>{decryptionResult.error}</p>
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+                  <div className="flex items-center">
+                    <TriangleAlert className="h-4 w-4 mr-2" />
+                    <span>{decryptionResult.error}</span>
+                  </div>
                 </div>
               )}
             </CardContent>
