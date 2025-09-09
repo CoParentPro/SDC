@@ -419,7 +419,9 @@ const SDCReaderPage = () => {
                 {decryptionResult.success ? (
                   <CheckCircle className="h-5 w-5 text-green-600" />
                 ) : (
-                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded"Triangle className="h-5 w-5 text-red-600" />
+                  <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded flex items-center gap-2">
+                    <TriangleAlert className="h-5 w-5 text-red-600" />
+                  </div>
                 )}
                 {decryptionResult.success ? 'File Decrypted Successfully' : 'Decryption Failed'}
               </CardTitle>

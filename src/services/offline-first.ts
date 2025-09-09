@@ -302,7 +302,7 @@ export class OfflineFirstService {
       if (newChild.nodeName === 'SCRIPT') {
         OfflineFirstService.getInstance().detectExternalAccess(
           'Script injection',
-          `External script attempted: ${(newChild as HTMLScriptElement).src || 'inline'}`
+          `External script attempted: ${(newChild as unknown as HTMLScriptElement).src || 'inline'}`
         );
       }
       return originalAppendChild.call(this, newChild) as T;

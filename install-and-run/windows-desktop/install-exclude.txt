@@ -1,0 +1,8 @@
+.git
+node_modules
+.next
+out
+dist
+*.log
+*.tmp
+install-and-run

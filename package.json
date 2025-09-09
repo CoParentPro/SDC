@@ -1,6 +1,8 @@
 {
   "name": "secure-data-compiler",
   "version": "0.1.0",
+  "description": "Secure Data Compiler - Professional productivity suite with encryption",
+  "author": "CoParentPro",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -64,5 +66,55 @@
     "tailwindcss": "^4",
     "typescript": "^5",
     "wait-on": "^8.0.4"
+  },
+  "build": {
+    "appId": "com.coparentpro.sdc",
+    "productName": "Secure Data Compiler",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "out/**/*",
+      "public/electron.js",
+      "public/preload.js",
+      "public/assets/**/*",
+      "node_modules/**/*"
+    ],
+    "extraResources": [
+      {
+        "from": "public/assets",
+        "to": "assets"
+      }
+    ],
+    "win": {
+      "target": "nsis",
+      "icon": "public/assets/icon.ico",
+      "verifyUpdateCodeSignature": false
+    },
+    "nsis": {
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "SDC",
+      "uninstallDisplayName": "Secure Data Compiler",
+      "license": "LICENSE.txt",
+      "installerIcon": "public/assets/installer.ico",
+      "uninstallerIcon": "public/assets/uninstaller.ico",
+      "installerHeader": "public/assets/installer-header.bmp",
+      "installerSidebar": "public/assets/installer-sidebar.bmp",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "runAfterFinish": true,
+      "menuCategory": true
+    },
+    "mac": {
+      "target": "dmg",
+      "icon": "public/assets/icon.icns",
+      "category": "public.app-category.productivity"
+    },
+    "linux": {
+      "target": "AppImage",
+      "icon": "public/assets/icon.png",
+      "category": "Office"
+    }
   }
 }
