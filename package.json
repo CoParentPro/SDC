@@ -1,6 +1,8 @@
 {
   "name": "secure-data-compiler",
   "version": "0.1.0",
+  "description": "Secure Data Compiler - Professional productivity suite with encryption",
+  "author": "CoParentPro",
   "private": true,
   "main": "public/electron.js",
   "homepage": "./",
@@ -87,7 +89,6 @@
     "win": {
       "target": "nsis",
       "icon": "public/assets/icon.ico",
-      "publisherName": "CoParentPro",
       "verifyUpdateCodeSignature": false
     },
     "nsis": {
